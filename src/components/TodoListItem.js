@@ -31,27 +31,16 @@ const styles = theme => ({
 });
 
 class TodoListItem extends Component {
-  state = {
-    done: false,
-    important: false
-  };
-
-  onLabelClick = () => {
-    this.setState(state => {
-      return { done: !state.done };
-    });
-  };
-
-  onMarkImportant = () => {
-    this.setState(state => {
-      return { important: !state.important };
-    });
-  };
-
   render() {
     const { classes } = this.props;
-    const { label, onDeleted } = this.props;
-    const { done, important } = this.state;
+    const {
+      label,
+      onDeleted,
+      onToggleImportant,
+      onToggleDone,
+      important,
+      done
+    } = this.props;
     let classNames = classes.text;
 
     if (done) {
@@ -64,14 +53,14 @@ class TodoListItem extends Component {
 
     return (
       <div className={classes.toDoListItem}>
-        <span className={classNames} onClick={this.onLabelClick}>
+        <span className={classNames} onClick={onToggleDone}>
           {label}
         </span>
         <div className={classes.buttons}>
           <IconButton
             color="primary"
             aria-label="add to shopping cart"
-            onClick={this.onMarkImportant}
+            onClick={onToggleImportant}
           >
             <PriorityHighIcon />
           </IconButton>

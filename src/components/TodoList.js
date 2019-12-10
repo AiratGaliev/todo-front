@@ -14,13 +14,18 @@ const styles = theme => ({
 class TodoList extends Component {
   render() {
     const { classes } = this.props;
-    const { todos, onDeleted } = this.props;
+    const { todos, onDeleted, onToggleImportant, onToggleDone } = this.props;
     const elements = todos.map(item => {
       const { id, ...itemProps } = item;
       return (
         <div key={id}>
           <ListItem>
-            <TodoListItem {...itemProps} onDeleted={() => onDeleted(id)} />
+            <TodoListItem
+              {...itemProps}
+              onDeleted={() => onDeleted(id)}
+              onToggleImportant={() => onToggleImportant(id)}
+              onToggleDone={() => onToggleDone(id)}
+            />
           </ListItem>
           <Divider component="li" />
         </div>

@@ -20,11 +20,20 @@ class App extends Component {
   maxId = 100;
   state = {
     todoData: [
-      { id: 1, label: 'Drink Coffee', important: false },
-      { id: 2, label: 'Make Awesome App', important: true },
-      { id: 3, label: 'Have a lunh', important: false }
+      this.createTodoItem('Drink Coffee'),
+      this.createTodoItem('Make Awesome App'),
+      this.createTodoItem('Have a lunh')
     ]
   };
+
+  createTodoItem(label) {
+    return {
+      id: this.maxId++,
+      label,
+      important: false,
+      done: false
+    };
+  }
 
   deleteItem = id => {
     this.setState(({ todoData }) => {
@@ -40,11 +49,7 @@ class App extends Component {
   };
 
   addItem = text => {
-    const newItem = {
-      label: text,
-      important: false,
-      id: this.maxId++
-    };
+    const newItem = this.createTodoItem(text);
     this.setState(({ todoData }) => {
       const newArray = [...todoData, newItem];
       return {
@@ -52,9 +57,35 @@ class App extends Component {
       };
     });
   };
-  
+
+  togglePropperty(arr, id, propName) {
+    const index = arr.findIndex(el => el.id === id);
+    const oldItem = arr[index];
+    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+    return [...arr.slice(0, index), newItem, ...arr.slice(index + 1)];
+  }
+
+  onToggleImportant = id => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.togglePropperty(todoData, id, 'important')
+      };
+    });
+  };
+
+  onToggleDone = id => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.togglePropperty(todoData, id, 'done')
+      };
+    });
+  };
+
   render() {
     const { classes } = this.props;
+    const { todoData } = this.state;
+    const doneCount = todoData.filter(el => el.done).length;
+    const toDoCount = todoData.length - doneCount;
     return (
       <div className={classes.root}>
         <Grid
@@ -64,9 +95,14 @@ class App extends Component {
           className={classes.container}
         >
           <Grid item xs={12}>
-            <AppHeader />
+            <AppHeader toDo={toDoCount} done={doneCount} />
             <SearchPanel />
-            <TodoList todos={this.state.todoData} onDeleted={this.deleteItem} />
+            <TodoList
+              todos={todoData}
+              onDeleted={this.deleteItem}
+              onToggleImportant={this.onToggleImportant}
+              onToggleDone={this.onToggleDone}
+            />
             <AddItem onAddedItem={this.addItem} />
           </Grid>
         </Grid>
