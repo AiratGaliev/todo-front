@@ -22,9 +22,10 @@ class App extends Component {
     todoData: [
       this.createTodoItem('Drink Coffee'),
       this.createTodoItem('Make Awesome App'),
-      this.createTodoItem('Have a lunh')
+      this.createTodoItem('Have a lunch')
     ],
-    term: ''
+    term: '',
+    filter: 'all'
   };
 
   createTodoItem(label) {
@@ -86,6 +87,10 @@ class App extends Component {
     this.setState({ term });
   };
 
+  onFilterChange = filter => {
+    this.setState({ filter });
+  };
+
   search(items, term) {
     if (term.length === 0) {
       return items;
@@ -96,10 +101,23 @@ class App extends Component {
     });
   }
 
+  filter(items, filter) {
+    switch (filter) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter(items => !items.done);
+      case 'done':
+        return items.filter(items => items.done);
+      default:
+        return items;
+    }
+  }
+
   render() {
     const { classes } = this.props;
-    const { todoData, term } = this.state;
-    const visibleItems = this.search(todoData, term);
+    const { todoData, term, filter } = this.state;
+    const visibleItems = this.filter(this.search(todoData, term), filter);
     const doneCount = todoData.filter(el => el.done).length;
     const toDoCount = todoData.length - doneCount;
     return (
@@ -112,7 +130,7 @@ class App extends Component {
         >
           <Grid item xs={12}>
             <AppHeader toDo={toDoCount} done={doneCount} />
-            <SearchPanel onSerachChange={this.onSerachChange} />
+            <SearchPanel onSerachChange={this.onSerachChange} filter={filter} onFilterChange={this.onFilterChange}/>
             <TodoList
               todos={visibleItems}
               onDeleted={this.deleteItem}

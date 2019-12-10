@@ -17,13 +17,14 @@ class SearchPanel extends Component {
     term: ''
   };
 
-  onSerachChange = (event) => {
+  onSerachChange = event => {
     const term = event.target.value;
-    this.setState({term});
-    this.props.onSerachChange(term)
-  }
+    this.setState({ term });
+    this.props.onSerachChange(term);
+  };
   render() {
     const { classes } = this.props;
+    const { filter, onFilterChange } = this.props;
     return (
       <Grid
         container
@@ -43,7 +44,7 @@ class SearchPanel extends Component {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <StatusFilter />
+          <StatusFilter filter={filter} onFilterChange={onFilterChange}/>
         </Grid>
       </Grid>
     );
