@@ -13,6 +13,15 @@ const styles = theme => ({
 });
 
 class SearchPanel extends Component {
+  state = {
+    term: ''
+  };
+
+  onSerachChange = (event) => {
+    const term = event.target.value;
+    this.setState({term});
+    this.props.onSerachChange(term)
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -29,6 +38,8 @@ class SearchPanel extends Component {
             type="search"
             variant="outlined"
             size="small"
+            value={this.state.term}
+            onChange={this.onSerachChange}
           />
         </Grid>
         <Grid item xs={12} md={6}>
