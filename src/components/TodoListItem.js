@@ -12,7 +12,10 @@ const styles = theme => ({
   },
   text: {
     marginLeft: theme.spacing(2),
-    flexGrow: 1
+    flexGrow: 1,    
+    textDecoration: done ? 'line-through': 'normal',
+    color: important ? 'steelblue': 'black',
+    fontWeight: important ? 'bold': 'normal'
   },
   buttons: {
     marginRight: theme.spacing(2)
