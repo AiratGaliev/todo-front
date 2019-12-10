@@ -12,10 +12,18 @@ const styles = theme => ({
   },
   text: {
     marginLeft: theme.spacing(2),
-    flexGrow: 1,    
-    textDecoration: done ? 'line-through': 'normal',
-    color: important ? 'steelblue': 'black',
-    fontWeight: important ? 'bold': 'normal'
+    flexGrow: 1
+  },
+  textDone: {
+    marginLeft: theme.spacing(2),
+    flexGrow: 1,
+    textDecoration: 'line-through'
+  },
+  textImportant: {
+    marginLeft: theme.spacing(2),
+    flexGrow: 1,
+    color: 'steelblue',
+    fontWeight: 'bold'
   },
   buttons: {
     marginRight: theme.spacing(2)
@@ -23,20 +31,48 @@ const styles = theme => ({
 });
 
 class TodoListItem extends Component {
+  state = {
+    done: false,
+    important: false
+  };
+
+  onLabelClick = () => {
+    this.setState(state => {
+      return { done: !state.done };
+    });
+  };
+
+  onMarkImportant = () => {
+    this.setState(state => {
+      return { important: !state.important };
+    });
+  };
+
   render() {
     const { classes } = this.props;
-    const { label, important = false } = this.props;
-    const style = {
-      color: important ? 'tomato' : 'black',
-      fontWeight: important ? 'bold' : 'normal'
-    };
+    const { label } = this.props;
+    const { done, important } = this.state;
+    let classNames = classes.text;
+
+    if (done) {
+      classNames = classes.textDone;
+    }
+
+    if (important) {
+      classNames = classes.textImportant;
+    }
+
     return (
       <div className={classes.toDoListItem}>
-        <span style={style} className={classes.text}>
+        <span className={classNames} onClick={this.onLabelClick}>
           {label}
         </span>
         <div className={classes.buttons}>
-          <IconButton color="primary" aria-label="add to shopping cart">
+          <IconButton
+            color="primary"
+            aria-label="add to shopping cart"
+            onClick={this.onMarkImportant}
+          >
             <PriorityHighIcon />
           </IconButton>
           <IconButton aria-label="delete" color="secondary">
