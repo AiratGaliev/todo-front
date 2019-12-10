@@ -4,6 +4,7 @@ import SearchPanel from './components/SearchPanel';
 import TodoList from './components/TodoList';
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import AddItem from './components/AddItem';
 
 const styles = () => ({
   root: {
@@ -16,6 +17,7 @@ const styles = () => ({
 });
 
 class App extends Component {
+  maxId = 100;
   state = {
     todoData: [
       { id: 1, label: 'Drink Coffee', important: false },
@@ -36,6 +38,21 @@ class App extends Component {
       };
     });
   };
+
+  addItem = text => {
+    const newItem = {
+      label: text,
+      important: false,
+      id: this.maxId++
+    };
+    this.setState(({ todoData }) => {
+      const newArray = [...todoData, newItem];
+      return {
+        todoData: newArray
+      };
+    });
+  };
+  
   render() {
     const { classes } = this.props;
     return (
@@ -50,6 +67,7 @@ class App extends Component {
             <AppHeader />
             <SearchPanel />
             <TodoList todos={this.state.todoData} onDeleted={this.deleteItem} />
+            <AddItem onAddedItem={this.addItem} />
           </Grid>
         </Grid>
       </div>
