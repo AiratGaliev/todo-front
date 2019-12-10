@@ -50,7 +50,7 @@ class TodoListItem extends Component {
 
   render() {
     const { classes } = this.props;
-    const { label } = this.props;
+    const { label, onDeleted } = this.props;
     const { done, important } = this.state;
     let classNames = classes.text;
 
@@ -75,7 +75,7 @@ class TodoListItem extends Component {
           >
             <PriorityHighIcon />
           </IconButton>
-          <IconButton aria-label="delete" color="secondary">
+          <IconButton aria-label="delete" color="secondary" onClick={onDeleted}>
             <DeleteIcon />
           </IconButton>
         </div>
